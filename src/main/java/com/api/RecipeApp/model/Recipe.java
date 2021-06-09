@@ -1,7 +1,11 @@
 package com.api.RecipeApp.model;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
 import java.util.List;
 
+@DynamoDBTable(tableName = "Recipes")
 public class Recipe {
 
     private String name;
@@ -16,6 +20,7 @@ public class Recipe {
         this.minutesToPrep = minutesToPrep;
     }
 
+    @DynamoDBHashKey(attributeName="name")
     public String getName() {
         return name;
     }
