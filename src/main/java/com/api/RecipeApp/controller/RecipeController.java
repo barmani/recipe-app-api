@@ -23,6 +23,11 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
+    /**
+     * Create a new recipe.
+     * @param recipe
+     * @return the created recipe
+     */
     @PostMapping
     public ResponseEntity createRecipe(@RequestBody Recipe recipe) {
         try {
@@ -35,6 +40,10 @@ public class RecipeController {
         }
     }
 
+    /**
+     * Scan the table to get all recipes.
+     * @return list of recipes
+     */
     @GetMapping
     public ResponseEntity getRecipes() {
         System.out.println("GET all");
@@ -48,12 +57,38 @@ public class RecipeController {
         }
     }
 
+    /**
+     * Retrieve a recipe by id.
+     * @param id
+     * @return the intended recipe
+     */
     @GetMapping(value = "/{id}")
     public ResponseEntity getRecipe(@PathVariable String id) {
         try {
             System.out.println(id);
             Recipe recipe = recipeService.getRecipe(id);
             return ResponseEntity.status(HttpStatus.OK).body(recipe);
+        } catch(AmazonServiceException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
+        } catch (AmazonClientException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Send whole recipe to update.
+     *
+     * @param id
+     * @param recipe
+     * @return updated recipe
+     */
+    @PutMapping(value = "/{id}")
+    public ResponseEntity updateRecipe(@PathVariable String id, @RequestBody Recipe recipe) {
+        System.out.println("PUT");
+        try {
+            System.out.println(id);
+            Recipe updatedRecipe = recipeService.updateRecipe(id, recipe);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedRecipe);
         } catch(AmazonServiceException e) {
             throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
         } catch (AmazonClientException e) {

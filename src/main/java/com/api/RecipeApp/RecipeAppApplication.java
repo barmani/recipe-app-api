@@ -39,7 +39,6 @@ public class RecipeAppApplication {
 					new ProvisionedThroughput(10L, 10L));
 			table.waitForActive();
 			System.out.println("Success.  Table status: " + table.getDescription().getTableStatus());
-
 		}
 		catch (Exception e) {
 			if (e instanceof ResourceInUseException) {
