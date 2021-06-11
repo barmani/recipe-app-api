@@ -96,5 +96,19 @@ public class RecipeController {
         }
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity deleteRecipe(@PathVariable String id) {
+        System.out.println("DELETE");
+        try {
+            System.out.println(id);
+            Recipe updatedRecipe = recipeService.deleteRecipe(id);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedRecipe);
+        } catch(AmazonServiceException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
+        } catch (AmazonClientException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
+    }
+
 
 }

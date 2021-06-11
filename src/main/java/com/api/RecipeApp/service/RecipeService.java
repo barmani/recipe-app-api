@@ -40,13 +40,17 @@ public class RecipeService {
     public Recipe updateRecipe(String id, Recipe recipe) {
         AmazonDynamoDB dynamoDB = DynamoDBClient.getClient();
         DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
-
-//        Map<String, ExpectedAttributeValue> expectedAttributeValueMap = new HashMap<>();
-//        expectedAttributeValueMap.put("id", new ExpectedAttributeValue(new AttributeValue(id)));
-//        DynamoDBSaveExpression saveExpression = new DynamoDBSaveExpression().withExpected(expectedAttributeValueMap);
-
         mapper.save(recipe, new DynamoDBMapperConfig.Builder()
                 .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.UPDATE).build());
         return recipe;
+    }
+
+    public Recipe deleteRecipe(String id) {
+        AmazonDynamoDB dynamoDB = DynamoDBClient.getClient();
+        DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
+        Recipe toDelete = new Recipe();
+        toDelete.setId(id);
+        mapper.delete(toDelete);
+        return toDelete;
     }
 }
