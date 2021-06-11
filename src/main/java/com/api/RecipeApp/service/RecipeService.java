@@ -24,4 +24,10 @@ public class RecipeService {
         DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
         return mapper.scan(Recipe.class, new DynamoDBScanExpression().withConsistentRead(false));
     }
+
+    public Recipe getRecipe(String id) {
+        AmazonDynamoDB dynamoDB = DynamoDBClient.getClient();
+        DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
+        return mapper.load(Recipe.class, id);
+    }
 }

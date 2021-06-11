@@ -37,10 +37,10 @@ public class RecipeController {
 
     @GetMapping
     public ResponseEntity getRecipes() {
-        System.out.println("GET");
+        System.out.println("GET all");
         try {
             List<Recipe> recipes = recipeService.getAllRecipes();
-            return ResponseEntity.status(HttpStatus.CREATED).body(recipes);
+            return ResponseEntity.status(HttpStatus.OK).body(recipes);
         } catch(AmazonServiceException e) {
             throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
         } catch (AmazonClientException e) {
@@ -49,9 +49,16 @@ public class RecipeController {
     }
 
     @GetMapping(value = "/{id}")
-    public Recipe getRecipe(@PathVariable Long id) {
-        System.out.println(id);
-        return null;
+    public ResponseEntity getRecipe(@PathVariable String id) {
+        try {
+            System.out.println(id);
+            Recipe recipe = recipeService.getRecipe(id);
+            return ResponseEntity.status(HttpStatus.OK).body(recipe);
+        } catch(AmazonServiceException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
+        } catch (AmazonClientException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
     }
 
 

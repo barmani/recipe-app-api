@@ -34,8 +34,8 @@ public class RecipeAppApplication {
 		try {
 			System.out.println("Attempting to create table");
 			Table table = dynamoDB.createTable(tableName,
-					Arrays.asList(new KeySchemaElement("name", KeyType.HASH)), // Partition
-					Arrays.asList(new AttributeDefinition("name", ScalarAttributeType.S)),
+					Arrays.asList(new KeySchemaElement("id", KeyType.HASH)), // Partition
+					Arrays.asList(new AttributeDefinition("id", ScalarAttributeType.S)),
 					new ProvisionedThroughput(10L, 10L));
 			table.waitForActive();
 			System.out.println("Success.  Table status: " + table.getDescription().getTableStatus());
