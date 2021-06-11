@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/recipe")
 public class RecipeController {
@@ -34,9 +36,16 @@ public class RecipeController {
     }
 
     @GetMapping
-    public Recipe getRecipes() {
+    public ResponseEntity getRecipes() {
         System.out.println("GET");
-        return null;
+        try {
+            List<Recipe> recipes = recipeService.getAllRecipes();
+            return ResponseEntity.status(HttpStatus.CREATED).body(recipes);
+        } catch(AmazonServiceException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
+        } catch (AmazonClientException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
     }
 
     @GetMapping(value = "/{id}")

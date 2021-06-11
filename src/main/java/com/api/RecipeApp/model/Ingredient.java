@@ -1,5 +1,8 @@
 package com.api.RecipeApp.model;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+
+@DynamoDBDocument
 public class Ingredient {
 
     private String name;
@@ -10,6 +13,10 @@ public class Ingredient {
         this.name = name;
         this.amount = amount;
         this.unit = unit;
+    }
+
+    public Ingredient() {
+
     }
 
     public String getName() {
@@ -38,10 +45,6 @@ public class Ingredient {
 
     @Override
     public String toString() {
-        return "Ingredient{" +
-                "name='" + name + '\'' +
-                ", amount=" + amount +
-                ", unit='" + unit + '\'' +
-                '}';
+        return String.format("%s %s %s", name, amount, unit);
     }
 }
