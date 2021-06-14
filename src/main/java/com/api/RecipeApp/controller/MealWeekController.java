@@ -8,10 +8,7 @@ import com.api.RecipeApp.service.MealWeekService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -33,6 +30,18 @@ public class MealWeekController {
         try {
             MealWeek createdMealWeek = mealWeekService.createMealWeek(meals);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdMealWeek);
+        } catch(AmazonServiceException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
+        } catch (AmazonClientException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity getAllMealWeeks() {
+        try {
+            List<MealWeek> createdMealWeek = mealWeekService.getAllMealWeeks();
+            return ResponseEntity.status(HttpStatus.OK).body(createdMealWeek);
         } catch(AmazonServiceException e) {
             throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
         } catch (AmazonClientException e) {
