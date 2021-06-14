@@ -29,11 +29,32 @@ public class RecipeAppApplication {
 
 		DynamoDB dynamoDB = new DynamoDB(client);
 
-		String tableName = "Recipes";
+		String recipeTable = "Recipes";
+		String mealWeeksTable = "MealWeeks";
 
+		// Create Recipes Table
 		try {
-			System.out.println("Attempting to create table");
-			Table table = dynamoDB.createTable(tableName,
+			System.out.println("Attempting to create recipes table");
+			Table table = dynamoDB.createTable(recipeTable,
+					Arrays.asList(new KeySchemaElement("id", KeyType.HASH)), // Partition
+					Arrays.asList(new AttributeDefinition("id", ScalarAttributeType.S)),
+					new ProvisionedThroughput(10L, 10L));
+			table.waitForActive();
+			System.out.println("Success.  Table status: " + table.getDescription().getTableStatus());
+		}
+		catch (Exception e) {
+			if (e instanceof ResourceInUseException) {
+				System.err.println("Table already created");
+			} else {
+				System.err.println("Unable to create table: ");
+				System.err.println(e.getMessage());
+			}
+		}
+
+		// Create MealWeeks Table
+		try {
+			System.out.println("Attempting to create mealweeks table");
+			Table table = dynamoDB.createTable(mealWeeksTable,
 					Arrays.asList(new KeySchemaElement("id", KeyType.HASH)), // Partition
 					Arrays.asList(new AttributeDefinition("id", ScalarAttributeType.S)),
 					new ProvisionedThroughput(10L, 10L));
