@@ -40,8 +40,20 @@ public class MealWeekController {
     @GetMapping
     public ResponseEntity getAllMealWeeks() {
         try {
-            List<MealWeek> createdMealWeek = mealWeekService.getAllMealWeeks();
-            return ResponseEntity.status(HttpStatus.OK).body(createdMealWeek);
+            List<MealWeek> mealWeeks = mealWeekService.getAllMealWeeks();
+            return ResponseEntity.status(HttpStatus.OK).body(mealWeeks);
+        } catch(AmazonServiceException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
+        } catch (AmazonClientException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity getMealWeekById(@PathVariable String id) {
+        try {
+            MealWeek mealWeek = mealWeekService.getMealWeekById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(mealWeek);
         } catch(AmazonServiceException e) {
             throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
         } catch (AmazonClientException e) {

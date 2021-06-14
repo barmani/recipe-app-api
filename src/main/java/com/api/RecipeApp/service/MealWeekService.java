@@ -28,4 +28,10 @@ public class MealWeekService {
         DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
         return mapper.scan(MealWeek.class, new DynamoDBScanExpression().withConsistentRead(false));
     }
+
+    public MealWeek getMealWeekById(String id) {
+        AmazonDynamoDB dynamoDB = DynamoDBClient.getClient();
+        DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
+        return mapper.load(MealWeek.class, id);
+    }
 }
