@@ -60,4 +60,29 @@ public class MealWeekController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity updateMealWeek(@PathVariable String id, @RequestBody MealWeek mealWeek) {
+        try {
+            MealWeek updatedMealWeek = mealWeekService.updateMealWeek(mealWeek);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedMealWeek);
+        } catch(AmazonServiceException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
+        } catch (AmazonClientException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity deleteMealWeek(@PathVariable String id) {
+        try {
+            MealWeek deletedMealWeek = mealWeekService.deleteMealWeek(id);
+            return ResponseEntity.status(HttpStatus.OK).body(deletedMealWeek);
+        } catch(AmazonServiceException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode()), e.getMessage(), e);
+        } catch (AmazonClientException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
+    }
+
 }
